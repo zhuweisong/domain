@@ -15,6 +15,7 @@ import com.domain.constvalue.Struct.DomainWhois;
 import com.domain.whois.FetchWhois;
 
 public class DBUpdateProxy {
+	private final String DBUtilFileName = "./properties/javadb-sample-properties.xml";
 	private JDBCTutorialUtilities myJDBCTutorialUtilities;
 
 	public DBUpdateProxy() {
@@ -22,14 +23,7 @@ public class DBUpdateProxy {
 	}
 
 	public void init() {
-		try {
-			myJDBCTutorialUtilities = new JDBCTutorialUtilities(
-					".\\properties\\javadb-sample-properties.xml");
-		} catch (Exception e) {
-			System.err.println("Problem reading properties file ");
-			e.printStackTrace();
-			return;
-		}
+		myJDBCTutorialUtilities = JDBCTutorialUtilities.init(DBUtilFileName);
 	}
 
 	public void updateprice(List<DomainPrice> dpl) {
@@ -218,7 +212,7 @@ public class DBUpdateProxy {
 
 				dw2 = whois.viewTable(type, d, "", "");
 				
-				//É¾³ýµôÏÖÓÐµÄ¿Õ°×£¬ÒÔÃâºóÀ´ÐÞÕý¼·ÈëÖØ¸´¼ÇÂ¼
+				//É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄ¿Õ°×£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½Â¼
 				List<Map.Entry<String, DomainWhois>> dwB = new ArrayList<Map.Entry<String, DomainWhois>>();
 				dwB.addAll(dw2.entrySet());
 				List<DomainWhois> dwL = new ArrayList<DomainWhois>();

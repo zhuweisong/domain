@@ -26,6 +26,7 @@ public class Domain {
 
 		int ActionFlag = 0;
 
+		//java jar domain.jar -apwusn
 		for (int i = 0; i < args.length; i++) {
 			System.out.println("parsing arg nr. " + i + ": '" + args[i] + "'");
 			if (args[i].length() == 0) {
@@ -73,85 +74,52 @@ public class Domain {
 		controller con = new controller();
 		con.init();
 
-		// con.updateHan();
-
-//		FetchWhoisFromPhenixxRunnable wh = new FetchWhoisFromPhenixxRunnable(con, ActionFlag);
-//		new Thread(wh, "phineex").start();
-
-//		FetchWhoisFromEnameRunable er = new FetchWhoisFromEnameRunable(con,
-//				ActionFlag);
-//		new Thread(er, "ename").start();
-
 		FetchWhois whoise = new FetchWhois();
 
-		if ((ActionFlag & ACTION_AUCTION_PRICE) > 0) {
+//		if ((ActionFlag & ACTION_AUCTION_PRICE) > 0) {
 			System.out.println("-----PRICE 1------"
 					+ DomainUtil.getSystemTime());
-			con.updateAuctionPrice(0);
-		}
+//			con.updateAuctionPrice(0);
+//		}
 
 //		if ((ActionFlag & ACTION_WHOIS_ALL) > 0) {
-			System.out.println("-----WHOIS_ALL 2------"
-					+ DomainUtil.getSystemTime());
-			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_2_COM, 0, 100,
-					100);
-			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_3_COM, 323,
-					1000, 500);
-//			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_4_COM, 0,
+//			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_4_COM, START,
+//					10000, 500);
+//			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_4_CN, START, 
 //					10000, 500);
 //		}
 
-		if ((ActionFlag & ACTION_AUCTION_URL) > 0) {
+//		if ((ActionFlag & ACTION_AUCTION_URL) > 0) {
 			System.out.println("-----AUCTION_URL 1------"
 					+ DomainUtil.getSystemTime());
-			con.updateAuctionURL(DomainConst.DOMAIN_TYPE_4_COM);
-			con.updateAuctionURL(DomainConst.DOMAIN_TYPE_4_CN);
-			con.updateAuctionURL(DomainConst.DOMAIN_TYPE_3_COM);
-			con.updateAuctionURL(DomainConst.DOMAIN_TYPE_3_CN);
-		}
+//			con.updateAuctionURL(DomainConst.DOMAIN_TYPE_4_COM);
+//			con.updateAuctionURL(DomainConst.DOMAIN_TYPE_4_CN);
+//		}
 
-		if ((ActionFlag & ACTION_PRICE_NORMAL) > 0) {
+//		if ((ActionFlag & ACTION_PRICE_NORMAL) > 0) {
 			System.out.println("-----PRICE_NORMAL 1------"
 					+ DomainUtil.getSystemTime());
-
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_3_CN);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_3_COM);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_3_NET);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_CN);
 			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_COM);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_NET);
+			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_CN);
+
 
 			con.updatePrice4N(FetcherPriceFrom4N.PRICE_PART);
-		}
+//		}
 
-		if ((ActionFlag & ACTION_STATIS) > 0) {
+//		if ((ActionFlag & ACTION_STATIS) > 0) {
 			System.out.println("-----STATIS ------"
 					+ DomainUtil.getSystemTime());
 			con.updateStatis();
-		}
+//		}
 
-		if ((ActionFlag & ACTION_WHOIS_ALL) > 0) {
-			System.out.println("-----WHOIS_ALL 2------"
-					+ DomainUtil.getSystemTime());
-			
-			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_2_CN, START, 100,
-					100);
-			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_3_CN, START, 1000,
-					500);
-			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_4_CN, START, 10000,
-					500);
-			con.updatePin(whoise);
-		}
 		
 		if ((ActionFlag & ACTION_PRICE_NORMAL) > 0) {
 			System.out.println("-----PRICE_NORMAL 2------"
 					+ DomainUtil.getSystemTime());
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_3_CN);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_3_COM);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_3_NET);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_CN);
 			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_COM);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_NET);
+			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_CN);
+
+
 
 			con.updatePrice4N(FetcherPriceFrom4N.PRICE_ALL);
 		}

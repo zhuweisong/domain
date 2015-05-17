@@ -1,6 +1,5 @@
 package com.domain.control;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import com.domain.constvalue.Struct;
 import com.domain.constvalue.Struct.DomainAuction;
 import com.domain.constvalue.Struct.DomainPrice;
 import com.domain.constvalue.Struct.DomainWhois;
-import com.domain.pinyin.pinyinHelper;
 import com.domain.price.FetcherAuctionPriceFromEname;
 import com.domain.price.FetcherAuctionURLFromEname;
 import com.domain.price.FetcherIntFromEname;
@@ -22,11 +20,11 @@ import com.domain.whois.FetchWhoisBase;
 
 public class controller {
 
-	private DBUpdateProxy proxy = new DBUpdateProxy();
+	private DBUpdateProxy mDbUpdateProxy = new DBUpdateProxy();
 	FetcherIntFromEname eFetchor = new FetcherIntFromEname();
 
 	void init() {
-		proxy.init();
+		mDbUpdateProxy.init();
 	}
 
 	void updatePrice4N(int type) {
@@ -38,7 +36,7 @@ public class controller {
 			dpl = fetchor.getAllDominaPrice(type, page);
 
 			if (dpl.size() > 100) {
-				proxy.updateprice(dpl);
+				mDbUpdateProxy.updateprice(dpl);
 				dpl.clear();
 			}
 
@@ -47,7 +45,7 @@ public class controller {
 		} while (page <= fetchor.getPage());
 
 		if (dpl.size() > 0) {
-			proxy.updateprice(dpl);
+			mDbUpdateProxy.updateprice(dpl);
 			dpl.clear();
 		}
 	}
@@ -59,7 +57,7 @@ public class controller {
 		do {
 			List<DomainPrice> dpl = eFetchor.getAllDominaPrice(type, page * 30);
 			if (dpl.size() > 0)
-				proxy.updateprice(dpl);
+				mDbUpdateProxy.updateprice(dpl);
 			page++;
 			i = dpl.size();
 
@@ -74,7 +72,7 @@ public class controller {
 		do {
 			List<DomainWhois> dwl = whoise.getAllWhois(type, start, start
 					+ mStep);
-			proxy.updateWhois(dwl, type, start, start + mStep);
+			mDbUpdateProxy.updateWhois(dwl, type, start, start + mStep);
 
 			start += mStep;
 		} while (start < mEnd);
@@ -90,10 +88,10 @@ public class controller {
 					.getAllAuctionURL(type, page * 30);
 			i = dpl.size();
 			if (i > 0)
-				proxy.updateBiddingURL(dpl);
+				mDbUpdateProxy.updateBiddingURL(dpl);
 			page++;
 
-			// Í¬Ê±´øµ×¼ÛÅÄÂôµÄÇé¿öÖ±½ÓÈë¼Û¸ñ¿â
+			// Í¬Ê±ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½Û¸ï¿½ï¿½
 			List<DomainPrice> dp2 = new ArrayList<DomainPrice>();
 			for (DomainAuction dw : dpl) {
 				if (dw.pricetype == DomainConst.DOMAIN_BIN_AUCTION_WITH_PRICE)
@@ -101,39 +99,39 @@ public class controller {
 				;
 			}
 
-			proxy.updateprice(dp2);
+			mDbUpdateProxy.updateprice(dp2);
 			DomainUtil.Sleep(2000);
 		} while (i >= 30);
 	}
 
 	void updateAuctionPrice(int type) {
 		FetcherAuctionPriceFromEname fetch = new FetcherAuctionPriceFromEname();
-		Map<String, DomainAuction> da = proxy.getAuctionURL();
+		Map<String, DomainAuction> da = mDbUpdateProxy.getAuctionURL();
 		List<DomainPrice> dpl = fetch.getAutcionPrice(da);
 		if (dpl.size() > 0)
-			proxy.updateprice(dpl);
+			mDbUpdateProxy.updateprice(dpl);
 	}
 
 	void updateEmptywhois(int type) {
-		Map<String, DomainWhois> dw = proxy.getEmptyWhois(type,
+		Map<String, DomainWhois> dw = mDbUpdateProxy.getEmptyWhois(type,
 				DomainUtil.getCurrentSqlDate());
 		FetchWhois f = new FetchWhois();
 		List<Struct.DomainWhois> dl = f.getAllWhois(dw);
-		proxy.updateWhois(dl, type);
+		mDbUpdateProxy.updateWhois(dl, type);
 	}
 
 	void updateStatis() {
-		proxy.updateStatis();
+		mDbUpdateProxy.updateStatis();
 	}
 
 	void updatePin(FetchWhoisBase f) {
-		Map<String, DomainPrice> dw = proxy.getPrice(
+		Map<String, DomainPrice> dw = mDbUpdateProxy.getPrice(
 				DomainConst.DOMAIN_TYPE_PIN, DomainConst.DOMAIN_QQ_BID,
 				DomainUtil.getCurrentSqlDate());
 
 		List<Struct.DomainWhois> dl = f.getAllWhois(dw,
 				DomainConst.DOMAIN_TYPE_PIN);
-		proxy.updateWhois(dl, DomainConst.DOMAIN_TYPE_PIN);
+		mDbUpdateProxy.updateWhois(dl, DomainConst.DOMAIN_TYPE_PIN);
 	}
 
 

@@ -263,18 +263,13 @@ public class JDBCTutorialUtilities {
 
       // Using a driver manager:
 
-      if (this.dbms.equals("mysql")) {
 //        DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         conn =
             DriverManager.getConnection("jdbc:" + dbms + "://" + serverName +
                                         ":" + portNumber + "/" + dbName,
                                         connectionProps);
         conn.setCatalog(this.dbName);
-      } else if (this.dbms.equals("derby")) {
-//        DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
-        conn =
-            DriverManager.getConnection("jdbc:" + dbms + ":" + dbName, connectionProps);
-      }
+      
       System.out.println("Connected to database");
       return conn;
     }
@@ -288,7 +283,6 @@ public class JDBCTutorialUtilities {
     
     String currentUrlString = null;
 
-    if (this.dbms.equals("mysql")) {
       currentUrlString = "jdbc:" + this.dbms + "://" + this.serverName +
                                       ":" + this.portNumber + "/";
       conn =
@@ -296,15 +290,8 @@ public class JDBCTutorialUtilities {
                                       connectionProps);
       
       this.urlString = currentUrlString + this.dbName;
-      conn.setCatalog(this.dbName);
-    } else if (this.dbms.equals("derby")) {
-      this.urlString = "jdbc:" + this.dbms + ":" + this.dbName;
-      
-      conn =
-          DriverManager.getConnection(this.urlString + 
-                                      ";create=true", connectionProps);
-      
-    }
+//      conn.setCatalog(this.dbName);
+
     System.out.println("Connected to database");
     return conn;
   }
@@ -315,17 +302,12 @@ public class JDBCTutorialUtilities {
     Properties connectionProps = new Properties();
     connectionProps.put("user", userName);
     connectionProps.put("password", password);
-    if (this.dbms.equals("mysql")) {
-      conn =
-          DriverManager.getConnection("jdbc:" + this.dbms + "://" + this.serverName +
+
+    conn = DriverManager.getConnection("jdbc:" + this.dbms + "://" + this.serverName +
                                       ":" + this.portNumber + "/",
                                       connectionProps);
-      conn.setCatalog(this.dbName);
-    } else if (this.dbms.equals("derby")) {
-      conn =
-          DriverManager.getConnection("jdbc:" + this.dbms + ":" + this.dbName +
-                                      ";create=true", connectionProps);
-    }
+    conn.setCatalog(this.dbName);
+
     return conn;
   }
 
@@ -371,22 +353,19 @@ public class JDBCTutorialUtilities {
     
   }
 
-  public static void main(String[] args) {
-    JDBCTutorialUtilities myJDBCTutorialUtilities;
+  public static JDBCTutorialUtilities init(String args) {
+    JDBCTutorialUtilities myJDBCTutorialUtilities = null;
     Connection myConnection = null;
-    if (args[0] == null) {
-      System.out.println("Properties file not specified at command line");
-      return;
-    } else {
+
       try {
-        System.out.println("Reading properties file " + args[0]);
-        myJDBCTutorialUtilities = new JDBCTutorialUtilities(args[0]);
+        System.out.println("Reading properties file " + args);
+        myJDBCTutorialUtilities = new JDBCTutorialUtilities(args);
       } catch (Exception e) {
-        System.out.println("Problem reading properties file " + args[0]);
+        System.out.println("Problem reading properties file " + args);
         e.printStackTrace();
-        return;
+        return null;
       }
-    }
+
 
     try {
       myConnection = myJDBCTutorialUtilities.getConnection();
@@ -411,5 +390,6 @@ public class JDBCTutorialUtilities {
       JDBCTutorialUtilities.closeConnection(myConnection);
     }
 
+    return myJDBCTutorialUtilities;
   }
 }

@@ -28,12 +28,12 @@ public class DomainAuctionURLTable extends DomainDBBase {
 	}
 	
 	public String getSQLCreateTable() {
-		String createString = "create table DomainAuctionURL "
+		String createString = "create table IF not exists  domainautionurl "
 				+ "(domain varchar(32) NOT NULL, " + "type int(32) NOT NULL, "
 				+ "price int(32) DEFAULT 0, " + "pricetype int(32) NOT NULL, "
 				+ "fromWeb int(32) DEFAULT 1, " + "priceDate date not null, "
 				+ "URL varchar(64), " + "AcutionEnd Time NOT NULL, "
-				+ "PRIMARY KEY(domain, priceDate));";
+				+ "PRIMARY KEY(domain, priceDate))";
 		return createString;
 	}
 	

@@ -66,37 +66,21 @@ public class JDBCTutorialUtilities {
   private Properties prop;
   
   public static void initializeTables(Connection con, String dbNameArg, String dbmsArg) throws SQLException {
-//    SuppliersTable mySuppliersTable =
-//      new SuppliersTable(con, dbNameArg, dbmsArg);
-//    CoffeesTable myCoffeeTable =
-//      new CoffeesTable(con, dbNameArg, dbmsArg);
-//    RSSFeedsTable myRSSFeedsTable = 
-//      new RSSFeedsTable(con, dbNameArg, dbmsArg);
-//    ProductInformationTable myPIT =
-//      new ProductInformationTable(con, dbNameArg, dbmsArg);
-//
-//    System.out.println("\nDropping exisiting PRODUCT_INFORMATION, COFFEES and SUPPLIERS tables");
-//    myPIT.dropTable();
-//    myRSSFeedsTable.dropTable();
-//    myCoffeeTable.dropTable();
-//    mySuppliersTable.dropTable();
-//
-//    System.out.println("\nCreating and populating SUPPLIERS table...");
-//
-//    System.out.println("\nCreating SUPPLIERS table");
-//    mySuppliersTable.createTable();
-//    System.out.println("\nPopulating SUPPLIERS table");
-//    mySuppliersTable.populateTable();
-//
-//    System.out.println("\nCreating and populating COFFEES table...");
-//
-//    System.out.println("\nCreating COFFEES table");
-//    myCoffeeTable.createTable();
-//    System.out.println("\nPopulating COFFEES table");
-//    myCoffeeTable.populateTable();
-//    
-//    System.out.println("\nCreating RSS_FEEDS table...");    
-//    myRSSFeedsTable.createTable();
+	  DomainAuctionURLTable autionTable =
+			  new DomainAuctionURLTable(con, dbNameArg, dbmsArg);
+	  DomainPriceTable domainPrice =
+			  new DomainPriceTable(con, dbNameArg, dbmsArg);
+	  DomainWhoisTable domainWhois = 
+			  new DomainWhoisTable(con, dbNameArg, dbmsArg);
+
+    System.out.println("\nCreating autionTable table");
+    autionTable.createTable();
+
+    System.out.println("\nCreating domainPrice table");
+    domainPrice.createTable();
+
+    System.out.println("\nCreating domainWhois table...");    
+    domainWhois.createTable();
   }
   
   public static void rowIdLifetime(Connection conn) throws SQLException {
@@ -283,14 +267,12 @@ public class JDBCTutorialUtilities {
     
     String currentUrlString = null;
 
-      currentUrlString = "jdbc:" + this.dbms + "://" + this.serverName +
+    currentUrlString = "jdbc:" + this.dbms + "://" + this.serverName +
                                       ":" + this.portNumber + "/";
-      conn =
-          DriverManager.getConnection(currentUrlString,
-                                      connectionProps);
+    conn = DriverManager.getConnection(currentUrlString, connectionProps);
       
-      this.urlString = currentUrlString + this.dbName;
-//      conn.setCatalog(this.dbName);
+    this.urlString = currentUrlString + this.dbName;
+      conn.setCatalog(this.dbName);
 
     System.out.println("Connected to database");
     return conn;
@@ -382,6 +364,9 @@ public class JDBCTutorialUtilities {
       JDBCTutorialUtilities.cursorHoldabilitySupport(myConnection);
       JDBCTutorialUtilities.rowIdLifetime(myConnection);
 
+      JDBCTutorialUtilities.initializeTables(myConnection,
+							              myJDBCTutorialUtilities.dbName,
+							              myJDBCTutorialUtilities.dbms);
     } catch (SQLException e) {
       JDBCTutorialUtilities.printSQLException(e);
     } catch (Exception e) {

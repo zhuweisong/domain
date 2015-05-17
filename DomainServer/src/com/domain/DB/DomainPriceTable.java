@@ -28,12 +28,13 @@ public class DomainPriceTable {
 	}
 
 	public void createTable() throws SQLException {
-		String createString = "create table DomainPrice "
+
+		String createString = "create table IF not exists domainprice "
 				+ "(domain varchar(32) NOT NULL, " + "type int(32) NOT NULL, "
 				+ "price int(32) DEFAULT 0, " + "pricetype int(32) NOT NULL, "
 				+ "fromWeb int(32) DEFAULT 1, " + "priceDate date not null, "
 				+ "inforer char(16) DEFAULT '', " + "memo varchar(512), "
-				+ "PRIMARY KEY(domain, priceDate));";
+				+ "PRIMARY KEY(domain, priceDate))";
 		
 //		create table Domainmail
 //		(domain varchar(32) NOT NULL,
@@ -123,6 +124,7 @@ public class DomainPriceTable {
 			sb.append(",'");
 			sb.append(dpA.priceDate);
 			sb.append("',''");
+			sb.append(",''");
 			sb.append(")");
 			break;
 

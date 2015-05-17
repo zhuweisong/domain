@@ -25,12 +25,12 @@ public class DomainWhoisTable extends DomainDBBase {
 	}
 
 	public void createTable() throws SQLException {
-		String createString = "create table DomainWhois "
+		String createString = "create table IF not exists domainwhois "
 				+ "(domain varchar(32) NOT NULL, " + "type int(32) NOT NULL, "
 				+ "reg_email varchar(128), " + "reg_name varchar(128), "
 				+ "reg_phone varchar(32), " + "reg_url varchar(128), "
 				+ "reg_country varchar(32), " + "update_date date not null, "
-				+ "PRIMARY KEY(domain, update_date));";
+				+ "PRIMARY KEY(domain, update_date))";
 
 		Statement stmt = null;
 		try {

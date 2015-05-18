@@ -77,17 +77,17 @@ public class Domain {
 		FetchWhois whoise = new FetchWhois();
 
 //		if ((ActionFlag & ACTION_AUCTION_PRICE) > 0) {
-			System.out.println("-----PRICE 1------"
-					+ DomainUtil.getSystemTime());
+//			System.out.println("-----PRICE 1------"
+//					+ DomainUtil.getSystemTime());
 //			con.updateAuctionPrice(0);
 //		}
 
-//		if ((ActionFlag & ACTION_WHOIS_ALL) > 0) {
-//			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_4_COM, START,
-//					10000, 500);
-//			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_4_CN, START, 
-//					10000, 500);
-//		}
+		if ((ActionFlag & ACTION_WHOIS_ALL) > 0) {
+			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_4_COM, START,
+					10000, 500);
+			con.updateWhois(whoise, DomainConst.DOMAIN_TYPE_4_CN, START, 
+					10000, 500);
+		}
 
 //		if ((ActionFlag & ACTION_AUCTION_URL) > 0) {
 			System.out.println("-----AUCTION_URL 1------"
@@ -96,33 +96,20 @@ public class Domain {
 //			con.updateAuctionURL(DomainConst.DOMAIN_TYPE_4_CN);
 //		}
 
-//		if ((ActionFlag & ACTION_PRICE_NORMAL) > 0) {
+		if ((ActionFlag & ACTION_PRICE_NORMAL) > 0) {
 			System.out.println("-----PRICE_NORMAL 1------"
 					+ DomainUtil.getSystemTime());
 			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_COM);
 			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_CN);
 
-
 			con.updatePrice4N(FetcherPriceFrom4N.PRICE_PART);
-//		}
+		}
 
 //		if ((ActionFlag & ACTION_STATIS) > 0) {
 			System.out.println("-----STATIS ------"
 					+ DomainUtil.getSystemTime());
-			con.updateStatis();
+//			con.updateStatis();
 //		}
-
-		
-		if ((ActionFlag & ACTION_PRICE_NORMAL) > 0) {
-			System.out.println("-----PRICE_NORMAL 2------"
-					+ DomainUtil.getSystemTime());
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_COM);
-			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_CN);
-
-
-
-			con.updatePrice4N(FetcherPriceFrom4N.PRICE_ALL);
-		}
 
 		System.out.println("-----end------");
 	}

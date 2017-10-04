@@ -54,8 +54,8 @@ public class FetcherPriceFrom4N extends FetcherBase {
 				pg = Integer.parseInt(page);
 			}
 			else {
-				d1 = txt.indexOf("��¼,");
-				d2 = txt.indexOf("ҳ");
+				d1 = txt.indexOf("记录,");
+				d2 = txt.indexOf("页");
 				
 				String page = txt.substring(d1 + 3, d2).trim();
 				pg = Integer.parseInt(page);

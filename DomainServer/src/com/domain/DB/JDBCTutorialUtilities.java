@@ -36,25 +36,27 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 import java.util.*;
 import java.io.*;
 import java.sql.BatchUpdateException;
 import java.sql.DatabaseMetaData;
 import java.sql.RowIdLifetime;
 import java.sql.SQLWarning;
+
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.w3c.dom.Document;
+
+import com.domain.constvalue.DBConst;
 
 public class JDBCTutorialUtilities {
 
   public String dbms;
-  public String jarFile;
   public String dbName; 
   public String userName;
   public String password;
@@ -120,11 +122,9 @@ public class JDBCTutorialUtilities {
                        dbMetaData.supportsResultSetHoldability(ResultSet.CLOSE_CURSORS_AT_COMMIT));
   }
 
-  public JDBCTutorialUtilities(String propertiesFileName) throws FileNotFoundException,
-                                                                 IOException,
-                                                                 InvalidPropertiesFormatException {
+  public JDBCTutorialUtilities() {
     super();
-    this.setProperties(propertiesFileName);
+    this.setProperties();
   }
 
   public static void getWarningsFromResultSet(ResultSet rs) throws SQLException {
@@ -210,23 +210,16 @@ public class JDBCTutorialUtilities {
     }
   }
 
-  private void setProperties(String fileName) throws FileNotFoundException,
-                                                     IOException,
-                                                     InvalidPropertiesFormatException {
-    this.prop = new Properties();
-    FileInputStream fis = new FileInputStream(fileName);
-    prop.loadFromXML(fis);
+  private void setProperties() {
 
-    this.dbms = this.prop.getProperty("dbms");
-    this.jarFile = this.prop.getProperty("jar_file");
-    this.driver = this.prop.getProperty("driver");
-    this.dbName = this.prop.getProperty("database_name");
-    this.userName = this.prop.getProperty("user_name");
-    this.password = this.prop.getProperty("password");
-    if (this.password.isEmpty())
-    	this.password = "887kkdo781au";//
-    this.serverName = this.prop.getProperty("server_name");
-    this.portNumber = Integer.parseInt(this.prop.getProperty("port_number"));
+
+    this.dbms = DBConst.DBMS;
+    this.driver = DBConst.DRIVER;
+    this.dbName = DBConst.DATABASE_NAME;
+    this.userName = DBConst.USER_NAME;
+    this.password = DBConst.PASSWORD;
+    this.serverName = DBConst.SERVER_NAME;
+    this.portNumber = DBConst.PORT_NUMBER;
 
     System.out.println("Set the following properties:");
     System.out.println("dbms: " + dbms);
@@ -335,26 +328,14 @@ public class JDBCTutorialUtilities {
     
   }
 
-  public static JDBCTutorialUtilities init(String args) {
+  public static JDBCTutorialUtilities init() {
     JDBCTutorialUtilities myJDBCTutorialUtilities = null;
     Connection myConnection = null;
 
-      try {
-        System.out.println("Reading properties file " + args);
-        myJDBCTutorialUtilities = new JDBCTutorialUtilities(args);
-      } catch (Exception e) {
-        System.out.println("Problem reading properties file " + args);
-        e.printStackTrace();
-        return null;
-      }
-
+    myJDBCTutorialUtilities = new JDBCTutorialUtilities();
 
     try {
       myConnection = myJDBCTutorialUtilities.getConnection();
-      //      JDBCTutorialUtilities.outputClientInfoProperties(myConnection);
-      // myConnection = myJDBCTutorialUtilities.getConnection("root", "root", "jdbc:mysql://localhost:3306/");
-      //       myConnection = myJDBCTutorialUtilities.
-      //         getConnectionWithDataSource(myJDBCTutorialUtilities.dbName,"derby","", "", "localhost", 3306);
 
       // Java DB does not have an SQL create database command; it does require createDatabase
       JDBCTutorialUtilities.createDatabase(myConnection,

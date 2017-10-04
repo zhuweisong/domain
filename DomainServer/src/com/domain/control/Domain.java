@@ -96,14 +96,14 @@ public class Domain {
 //			con.updateAuctionURL(DomainConst.DOMAIN_TYPE_4_CN);
 //		}
 
-		if ((ActionFlag & ACTION_PRICE_NORMAL) > 0) {
+//		if ((ActionFlag & ACTION_PRICE_NORMAL) > 0) {
 			System.out.println("-----PRICE_NORMAL 1------"
 					+ DomainUtil.getSystemTime());
 			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_COM);
 			con.updatePriceEname(DomainConst.DOMAIN_TYPE_4_CN);
 
 			con.updatePrice4N(FetcherPriceFrom4N.PRICE_PART);
-		}
+//		}
 
 //		if ((ActionFlag & ACTION_STATIS) > 0) {
 			System.out.println("-----STATIS ------"

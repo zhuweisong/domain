@@ -15,7 +15,6 @@ import com.domain.constvalue.Struct.DomainWhois;
 import com.domain.whois.FetchWhois;
 
 public class DBUpdateProxy {
-	private final String DBUtilFileName = "./properties/javadb-sample-properties.xml";
 	private JDBCTutorialUtilities myJDBCTutorialUtilities;
 
 	public DBUpdateProxy() {
@@ -23,7 +22,7 @@ public class DBUpdateProxy {
 	}
 
 	public void init() {
-		myJDBCTutorialUtilities = JDBCTutorialUtilities.init(DBUtilFileName);
+		myJDBCTutorialUtilities = JDBCTutorialUtilities.init();
 	}
 
 	public void updateprice(List<DomainPrice> dpl) {

@@ -1,4 +1,4 @@
-package com.domain.helper;
+package com.house.utils;
 
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;

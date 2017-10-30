@@ -1,4 +1,4 @@
-package com.domain.helper;
+package com.house.utils;
 
 import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;

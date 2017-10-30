@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: lib/jsoup.jar lib/json.jar lib/commons-beanutils.jar lib/commons-collections.jar lib/commons-lang.jar lib/commons-logging.jar lib/ezmorph.jar lib/mysql.jar 
+Main-Class: com.domain.control.Domain

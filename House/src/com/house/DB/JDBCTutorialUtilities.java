@@ -52,7 +52,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
-import com.domain.constvalue.DBConst;
 
 public class JDBCTutorialUtilities {
 
@@ -68,21 +67,10 @@ public class JDBCTutorialUtilities {
   private Properties prop;
   
   public static void initializeTables(Connection con, String dbNameArg, String dbmsArg) throws SQLException {
-	  DomainAuctionURLTable autionTable =
-			  new DomainAuctionURLTable(con, dbNameArg, dbmsArg);
-	  DomainPriceTable domainPrice =
-			  new DomainPriceTable(con, dbNameArg, dbmsArg);
-	  DomainWhoisTable domainWhois = 
-			  new DomainWhoisTable(con, dbNameArg, dbmsArg);
-
+	DealInfoDateTable autionTable = new DealInfoDateTable(con, dbNameArg, dbmsArg);
     System.out.println("\nCreating autionTable table");
     autionTable.createTable();
 
-    System.out.println("\nCreating domainPrice table");
-    domainPrice.createTable();
-
-    System.out.println("\nCreating domainWhois table...");    
-    domainWhois.createTable();
   }
   
   public static void rowIdLifetime(Connection conn) throws SQLException {
@@ -254,7 +242,7 @@ public class JDBCTutorialUtilities {
 
   public Connection getConnection() throws SQLException {
     Connection conn = null;
-    Properties connectionProps = new Properties();
+	Properties connectionProps = new Properties();
     connectionProps.put("user", this.userName);
     connectionProps.put("password", this.password);
     

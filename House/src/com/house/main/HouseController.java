@@ -21,7 +21,9 @@ public class HouseController {
 	private void updateSecondHandInfo() {
 		HouseSecondInfoFetcher fetchor = new HouseSecondInfoFetcher();
 		
-		List<DataStruct.Item> dpl = fetchor.getData();
+		List<DataStruct.Item> dplDay = fetchor.getDataForDay();
+		
+		List<DataStruct.Item> dplMonth = fetchor.getDataForMonth();
 		
 		
 	}

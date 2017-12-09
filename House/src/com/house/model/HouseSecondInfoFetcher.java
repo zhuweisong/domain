@@ -4,11 +4,9 @@ import com.house.constvalue.DataStruct;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.jar.JarEntry;
-
-import javax.tools.JavaCompiler;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,37 +17,52 @@ public class HouseSecondInfoFetcher extends FetcherImpl {
 	public HouseSecondInfoFetcher() {
 	}
 	
-	public List<DataStruct.Item> getData() {
-		List<DataStruct.Item> items = getAuctionPriceByUrl(url);
-		return items;
-	}
-	
-	private List<DataStruct.Item> getAuctionPriceByUrl(String url) {
-		
+	public List<DataStruct.Item> getDataForDay() {
 
  		Boolean res = connect(url);
 		if (res) {
-			java.sql.Date date = parseDate();
-			List<DataStruct.Item> days = getDataForDay("ctl00_ContentPlaceHolder1_clientList1", date);
+			 Calendar rightNow = Calendar.getInstance();
+			 rightNow.add(Calendar.DAY_OF_YEAR,-1);//日期加10天
+ 			 java.sql.Date date = parseDate();
 			
-			List<DataStruct.Item> months = getDataForDay("ctl00_ContentPlaceHolder1_clientList2", date);
+			Date yesterday = rightNow.getTime();
 			
-			getDataForMonth();
-			
-			return days;
+			//1、如果数据等于当天，则拉数据
+			if (yesterday.getYear() == date.getYear() 
+					&& yesterday.getMonth() == date.getMonth() 
+					&& yesterday.getDay() == date.getDay()) {
+				List<DataStruct.Item> daydata = realyGetData("ctl00_ContentPlaceHolder1_clientList1", date);
+				return daydata;
+			}
 		}
 		
 		return null;
 	}
 	
-	private void getDataForMonth() {
-		String district = "全市";
-		
-		java.sql.Date date = parseDate();
-		
-	}
+	public List<DataStruct.Item> getDataForMonth() {
+		Date today = new Date();
+		if (today.getDay() == 1) {
+	 		Boolean res = connect(url);
+	 		
+			if (res) {
+				java.sql.Date date = new java.sql.Date(today.getTime());
+				List<DataStruct.Item> monthdata 
+					= realyGetData("ctl00_ContentPlaceHolder1_clientList2", date);
+				return monthdata;
+			}
+		}
 
-	private List<DataStruct.Item> getDataForDay(String tag, java.sql.Date date) {
+		return null;
+	}
+	
+
+	/**
+	 * 解析数据
+	 * @param tag
+	 * @param date
+	 * @return
+	 */
+	private List<DataStruct.Item> realyGetData(String tag, java.sql.Date date) {
 		String district = "全市";
 		Element parenet = doc.getElementById(tag);
 		Elements es =  parenet.child(0).children();
@@ -59,7 +72,7 @@ public class HouseSecondInfoFetcher extends FetcherImpl {
 		//从有效的第一列数据，到最后一更数据
 		for (int i = 1; i < size - 1; i++) {
 			Element element = es.get(i);
-			DataStruct.Item item = parse(element);
+			DataStruct.Item item = parseElemment(element);
 			if (item != null) {
 				item.HouseDistrict = district;
 				item.date = date;
@@ -71,7 +84,12 @@ public class HouseSecondInfoFetcher extends FetcherImpl {
 		return items;
 	}
 	
-	DataStruct.Item parse(Element element) {
+	/**
+	 * 解析具体的数据
+	 * @param element
+	 * @return
+	 */
+	DataStruct.Item parseElemment(Element element) {
 		Elements td = element.children();
 		DataStruct.Item dataBase = null;
 		int size = td.size();
@@ -104,7 +122,10 @@ public class HouseSecondInfoFetcher extends FetcherImpl {
 		return dataBase;
 	}
 	
-	
+	/**
+	 * 解析日期
+	 * @return
+	 */
 	java.sql.Date parseDate() {
 		Element parenet = doc.getElementById("ctl00_ContentPlaceHolder1_lblCurTime1");
 		String dateString = parenet.text();

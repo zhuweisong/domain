@@ -2,7 +2,7 @@ package com.house.main;
 
 import java.util.List;
 import com.house.constvalue.DataStruct;
-import com.house.model.HouseSecondInfoFetcher;
+import com.house.model.HouseSecondHandInfoFetcher;
 
 
 public class HouseController {
@@ -19,7 +19,7 @@ public class HouseController {
 	
 	
 	private void updateSecondHandInfo() {
-		HouseSecondInfoFetcher fetchor = new HouseSecondInfoFetcher();
+		HouseSecondHandInfoFetcher fetchor = new HouseSecondHandInfoFetcher();
 		
 		List<DataStruct.Item> dplDay = fetchor.getDataForDay();
 		

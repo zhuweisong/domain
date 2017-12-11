@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.house.constvalue.DataStruct;
@@ -29,109 +30,77 @@ public class DealInfoDateTable extends DBBase {
 	public String getSQLCreateTable(){
 		String createString = "create table IF not exists " 
 				+ TABLE_NAME
-				+ "(domain varchar(32) NOT NULL, " + "type int(32) NOT NULL, "
-				+ "price int(32) DEFAULT 0, " + "pricetype int(32) NOT NULL, "
-				+ "fromWeb int(32) DEFAULT 1, " + "priceDate date not null, "
-				+ "inforer char(16) DEFAULT '', " + "memo varchar(512), "
-				+ "PRIMARY KEY(domain, priceDate))";
+				+ "(id int(32) NOT NULL auto_increment, "
+				+ "DealDate date not null, " 
+				+ "HouseDistrict char(64) NOT NULL, "
+				+ "Usefulness char(64) NOT NULL, " 
+				+ "DealQuantity int(32) DEFAULT 0, "
+				+ "DealArea int(32) DEFAULT 0, " 
+				+ "DealPrice int(32) DEFAULT 0,"
+				+ "StaticType int(32) DEFAULT 0,"
+				+ "PRIMARY KEY(id))";
 		
 		return createString;
 	}
+
 	
-	public void getSQLBatchUpdate(Statement stmt, int index) {
+	
+	/**
+	 * 写入Item项
+	 * @param items
+	 * @param type
+	 */
+	public void insert(List<DataStruct.Item> items, int type) {
+		List<String> sqls = new ArrayList<String>();
+		for (DataStruct.Item item : items) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("INSERT INTO ");
+			sb.append(TABLE_NAME);
+			sb.append("VALUES (");
+			sb.append("'" + item.date.toGMTString()+ "'");
+			sb.append(",");
+			sb.append("'" + item.HouseDistrict + "'");
+			sb.append(",");
+			sb.append("'" + item.Usefulness + "'");
+			sb.append(",");
+			sb.append(item.DealQuantity);
+			sb.append(",");
+			sb.append(item.DealArea);
+			sb.append(",");
+			sb.append(item.DealPrice);
+			sb.append(",");
+			sb.append(type);
+			sb.append(");");
+			
+			String sql = sb.toString();
+			sqls.add(sql);
+		}
 		
-	}
-	
-	protected void onQueryResult(ResultSet rs, int type) {
-		
-		switch (type) {
-		case 1:
-//			String domainName = rs.getString("domain");
-//			int type1 = rs.getInt("type");
-//			int price = rs.getInt("price");
-//			int pricetype = rs.getInt("pricetype");
-//			int fromWeb = rs.getInt("fromWeb");
-//			java.sql.Date date = rs.getDate("priceDate");
-
-//			DomainPrice p1 = new Struct.DomainPrice(domainName, type1,
-//					price, pricetype, fromWeb, date);
-
-
-			break;
-
-		default:
-			break;
-		}
-
-	}
-	
-	
-	private void ExecuteSQLQuery(String sql, int type)
-			throws SQLException {
-
-		Statement stmt = null;
-
 		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-
-			while (rs.next()) {
-//				dpl.put(domainName, p1);
-			}
-
+			batchUpdate(sqls);
 		} catch (SQLException e) {
-			JDBCTutorialUtilities.printSQLException(e);
-		} finally {
-			if (stmt != null) {
-				stmt.close();
-			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	
-	public void insertRow(String domain, int type, int price, int isHot,
-			int fromWeb) throws SQLException {
-		Statement stmt = null;
-		try {
-			stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
-			java.sql.Date createdDate = Utils.getCurrentSqlDate();
-
-			ResultSet uprs = stmt.executeQuery("SELECT * FROM " + TABLE_NAME);
-			uprs.moveToInsertRow();
-
-			uprs.updateString("domain", domain);
-			uprs.updateInt("type", type);
-			uprs.updateFloat("price", price);
-			uprs.updateInt("priceType", isHot);
-			uprs.updateInt("fromWeb", fromWeb);
-			uprs.updateDate("priceDate", createdDate);
-
-			uprs.insertRow();
-			uprs.beforeFirst();
-
-		} catch (SQLException e) {
-			JDBCTutorialUtilities.printSQLException(e);
-		} finally {
-			if (stmt != null) {
-				stmt.close();
-			}
-		}
-	}
-	
-
-	public void batchUpdate(List<DataStruct.Item> dpl) throws SQLException {
+	/**
+	 * 批量执行sql
+	 * @param sqls
+	 * @throws SQLException
+	 */
+	private void batchUpdate(List<String> sqls) throws SQLException {
 
 		Statement stmt = null;
 		try {
 
 			this.con.setAutoCommit(false);
 			stmt = this.con.createStatement();
-//			for (DomainPrice entry : dpl) {
-//				String sql = getUpdateSql(entry);
-//				if (!sql.isEmpty())
-//					stmt.addBatch(sql);
-//			}
+			
+			for (String sql : sqls) {
+				if (!sql.isEmpty())
+					stmt.addBatch(sql);
+			}
 
 			stmt.executeBatch();
 			this.con.commit();
@@ -147,6 +116,8 @@ public class DealInfoDateTable extends DBBase {
 			this.con.setAutoCommit(true);
 		}
 	}
+
+
 
 	
 }

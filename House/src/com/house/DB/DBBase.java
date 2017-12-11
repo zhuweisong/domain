@@ -17,8 +17,7 @@ abstract public class DBBase {
 	}
 	
 	abstract public String getSQLCreateTable();
-	
-	abstract public void getSQLBatchUpdate(Statement stmt, int index);
+
 	
 	public void createTable() throws SQLException {
 
@@ -50,28 +49,4 @@ abstract public class DBBase {
 		}
 	}
 	
-	public void batchUpdate(int index) throws SQLException {
-
-		Statement stmt = null;
-		try {
-
-			this.con.setAutoCommit(false);
-			stmt = this.con.createStatement();
-
-			getSQLBatchUpdate(stmt, index);
-
-			stmt.executeBatch();
-			this.con.commit();
-
-		} catch (BatchUpdateException b) {
-			JDBCTutorialUtilities.printBatchUpdateException(b);
-		} catch (SQLException ex) {
-			JDBCTutorialUtilities.printSQLException(ex);
-		} finally {
-			if (stmt != null) {
-				stmt.close();
-			}
-			this.con.setAutoCommit(true);
-		}
-	}
 }

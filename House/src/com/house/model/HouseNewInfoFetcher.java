@@ -1,6 +1,8 @@
 package com.house.model;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +32,21 @@ public class HouseNewInfoFetcher extends Fetcher {
 	@Override
 	protected String getTag(int type) {
 		if (type == TYPE_DAY) 
-			return "TrClientList2";
+			return "clientList2"; 
+		else if (type == TYPE_MONTH) 
+			return "clientList4";
+		return null;
+	}
+	
+	@Override
+	protected String getTagDate(int type) {
+		if (type == TYPE_DAY) 
+			return "lblCurTime2";
 		else if (type == TYPE_MONTH) 
 			return "TrClientList4";
 		return null;
 	}
-
+	
 	@Override
 	protected List<Item> realyGetData(String tag, Date date) {
 		String district = "全市";
@@ -70,19 +81,37 @@ public class HouseNewInfoFetcher extends Fetcher {
 		int size = td.size();
 		
 		if (size >= 3) {
+			//1.用途
 			Element e0 = td.get(0);
 			String usefulness = e0.text();
 			
+			//2.成交套数
 			Element e1 = td.get(1);
-			String area = e1.text().replaceAll("\u00A0", "");
+			String DealQuantity = e1.text();
+
+			//3.成交面积(㎡)
+			Element e2 = td.get(2);
+			String area = e2.text().replaceAll("\u00A0", "");
 
 			int pos = area.indexOf(".");
 			if (pos > 0)
 				area = area.substring(0, pos);
+
+			//4.成交均价(元)
+			Element e3 = td.get(3);
+			String price = e3.text();
 			
-			Element e2 = td.get(2);
-			String DealQuantity = e2.text();
-			area = area.replaceAll(" ", "");
+			//5.月末可售套数
+			Element e4 = td.get(4);
+			String forSaleQuantity = e4.text();
+			
+			//5.月末可售面积(㎡)
+			Element e5 = td.get(5);
+			String forSaleArea = e5.text();
+			
+			pos = forSaleArea.indexOf(".");
+			if (pos > 0)
+				forSaleArea = forSaleArea.substring(0, pos);
 			
 			dataBase = new DataStruct.Item();
 			dataBase.Usefulness = usefulness;
@@ -95,12 +124,6 @@ public class HouseNewInfoFetcher extends Fetcher {
 		}
 
 		return dataBase;
-	}
-
-	@Override
-	protected Date parseDate() {
-		
-		return null;
 	}
 
 

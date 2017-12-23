@@ -32,6 +32,11 @@ public class HouseSecondHandInfoFetcher extends Fetcher {
 			return "ctl00_ContentPlaceHolder1_clientList2";
 		return null;
 	}
+	
+	@Override
+	protected String getTagDate(int type) {
+		return "ctl00_ContentPlaceHolder1_lblCurTime1";
+	}
 
 	/**
 	 * 解析数据
@@ -88,7 +93,6 @@ public class HouseSecondHandInfoFetcher extends Fetcher {
 			
 			Element e2 = td.get(2);
 			String DealQuantity = e2.text();
-			area = area.replaceAll(" ", "");
 			
 			dataBase = new DataStruct.Item();
 			dataBase.Usefulness = usefulness;
@@ -102,46 +106,6 @@ public class HouseSecondHandInfoFetcher extends Fetcher {
 
 		return dataBase;
 	}
-	
-	/**
-	 * 解析日期
-	 * @return
-	 */
-	@Override
-	protected java.sql.Date parseDate() {
-		Element parenet = doc.getElementById("ctl00_ContentPlaceHolder1_lblCurTime1");
-		String dateString = parenet.text();
-		int ypos = dateString.indexOf("年");
-		int mpos = dateString.indexOf("月");
-		int dpos = dateString.indexOf("日");
-		
-		String yearStr = dateString.substring(0, ypos);
-		String monthStr = dateString.substring(ypos + 1, mpos);
-		String dayStr = dateString.substring(mpos + 1, dpos);
-		
-		int year = Integer.valueOf(yearStr);
-		int month = Integer.valueOf(monthStr);
-		int day = Integer.valueOf(dayStr);
-		
-		java.sql.Date sqldate = null;
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = sdf.parse(year + "-" + month + "-" + day);
-			sqldate = new java.sql.Date(date.getTime());
-		}
-		catch (ParseException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		
-		return sqldate;
-	}
-	//
-
-
-
-
-	
 	
 	
 }

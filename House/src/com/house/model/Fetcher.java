@@ -23,13 +23,14 @@ public abstract class Fetcher {
 	protected final static int TYPE_DAY = 0;
 	protected final static int TYPE_MONTH = 1;
 	
-	protected abstract String getURL(int type);
+	protected abstract String getURL();
 
 	protected abstract List<DataStruct.Item> realyGetData(String tag, java.sql.Date date);
 	
-	protected abstract String getTag(int type);
+	protected abstract String getTagOfDay();
+	protected abstract String getTagOfMonth();
 	
-	protected abstract String getTagDate(int type);
+	protected abstract String getTagOfDate();
 
 	
 	protected Boolean connect(String url) {
@@ -50,7 +51,7 @@ public abstract class Fetcher {
 	
 	public List<DataStruct.Item> getDataForDay() {
 		//1、获取URL
-		String url = getURL(TYPE_DAY);
+		String url = getURL();
 		
 		//2、连接URL
  		Boolean res = connect(url);
@@ -59,19 +60,19 @@ public abstract class Fetcher {
 			 Calendar rightNow = Calendar.getInstance();
 			 rightNow.add(Calendar.DAY_OF_YEAR,-1);//日期减1天
 			 
-			 String tagDateString = getTagDate(TYPE_DAY);
+			 String tagDateString = getTagOfDate();
  			 java.sql.Date date = parseDate(tagDateString);
 			
 			Date yesterday = rightNow.getTime();
 			
 			//1、如果数据等于当天，则拉数据
-			if (yesterday.getYear() == date.getYear() 
-					&& yesterday.getMonth() == date.getMonth() 
-					&& yesterday.getDay() == date.getDay()) {
-				String tag = getTag(TYPE_DAY);
+//			if (yesterday.getYear() == date.getYear() 
+//					&& yesterday.getMonth() == date.getMonth() 
+//					&& yesterday.getDay() == date.getDay()) {
+				String tag = getTagOfDay();
 				List<DataStruct.Item> daydata = realyGetData(tag, date);
 				return daydata;
-			}
+//			}
 		}
 		
 		return null;
@@ -80,12 +81,12 @@ public abstract class Fetcher {
 	public List<DataStruct.Item> getDataForMonth() {
 		Date today = new Date();
 		if (today.getDay() == 1) {
-			String url = getURL(TYPE_MONTH);
+			String url = getURL();
 	 		Boolean res = connect(url);
 	 		
 			if (res) {
 				java.sql.Date date = new java.sql.Date(today.getTime());
-				String tag = getTag(TYPE_MONTH);
+				String tag = getTagOfMonth();
 				List<DataStruct.Item> monthdata = realyGetData(tag, date);
 				return monthdata;
 			}

@@ -9,5 +9,4 @@ public class DBConst {
 	//public static final String PASSWORD = "887kkdo781au"; //
 	public static final String SERVER_NAME = "localhost"; 
 	public static final int PORT_NUMBER = 3306; 	
-	//MySQL57
 }

@@ -31,6 +31,7 @@ public class DataStruct {
 		public int DealArea;		//成交面积
 		public int DealPrice;		//成交均价
 		public String Usefulness; 		//房产用途 公寓, 住宅，商业
+		public String memo; //可以在此填写政策
 	}
 	
 	/**

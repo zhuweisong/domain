@@ -12,30 +12,31 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
-public class HouseSecondHandInfoFetcher extends Fetcher {
+public class SecondHandHouseInfoFetcher extends Fetcher {
 	private static final String TAG = "HouseSecondInfoFetcher"; 
-	private static final String url = "http://ris.szpl.gov.cn/credit/showcjgs/esfcjgs.aspx";
+	private static final String url = "http://zjj.sz.gov.cn/ris/szfdc/showcjgs/esfcjgs.aspx";
 	
-	public HouseSecondHandInfoFetcher() {
+	public SecondHandHouseInfoFetcher() {
 	}
 	
 	@Override
-	protected String getURL(int type) {
+	protected String getURL() {
 		return url;
 	}
 	
 	@Override
-	protected String getTag(int type) {
-		if (type == TYPE_DAY) 
-			return "ctl00_ContentPlaceHolder1_clientList1";
-		else if (type == TYPE_MONTH) 
-			return "ctl00_ContentPlaceHolder1_clientList2";
-		return null;
+	protected String getTagOfDay() {
+		return "lbldistrict1";
 	}
 	
 	@Override
-	protected String getTagDate(int type) {
-		return "ctl00_ContentPlaceHolder1_lblCurTime1";
+	protected String getTagOfMonth() {
+		return "lbldistrict2";
+	}
+	
+	@Override
+	protected String getTagOfDate() {
+		return "lblCurTime1";
 	}
 
 	/**
@@ -46,25 +47,36 @@ public class HouseSecondHandInfoFetcher extends Fetcher {
 	 */
 	@Override
 	protected List<Item> realyGetData(String tag, java.sql.Date date) {
-		String district = "全市";
-		Element parenet = doc.getElementById(tag);
-		Elements es =  parenet.child(0).children();
-		List<DataStruct.Item> items = new ArrayList<DataStruct.Item>();
 		
-		int size = es.size();
-		//从有效的第一列数据，到最后一更数据
-		for (int i = 1; i < size - 1; i++) {
-			Element element = es.get(i);
-			DataStruct.Item item = parseElemment(element);
-			if (item != null) {
-				item.HouseDistrict = district;
-				item.date = date;
-				items.add(item);
-				
-				System.out.println( TAG + ":" + item.toString());
+		Element tagEle = doc.getElementById(tag);
+		
+		if (tagEle!=null) {
+			final String district = tagEle.text();
+			Element parenet = tagEle.parent();
+			
+			Elements es =  parenet.child(2).child(0).children();
+			List<DataStruct.Item> items = new ArrayList<DataStruct.Item>();
+			
+			int size = es.size();
+			//从有效的第一列数据，到最后一更数据
+			for (int i = 1; i < size - 2; i++) {
+				Element element = es.get(i);
+				DataStruct.Item item = parseElemment(element);
+				if (item != null) {
+					item.HouseDistrict = district;
+					item.date = date;
+					items.add(item);
+					
+					System.out.println( TAG + ":" + item.toString());
+				}
 			}
+			return items;
+		} 
+		else {
+			System.out.println( TAG + ": realyGetData Error ");
 		}
-		return items;
+
+		return null;
 
 	}
 	
@@ -85,7 +97,7 @@ public class HouseSecondHandInfoFetcher extends Fetcher {
 			String usefulness = e0.text();
 			
 			Element e1 = td.get(1);
-			String area = e1.text().replaceAll("\u00A0", "");
+			String area = e1.text();
 
 			int pos = area.indexOf(".");
 			if (pos > 0)
@@ -98,7 +110,6 @@ public class HouseSecondHandInfoFetcher extends Fetcher {
 			dataBase.Usefulness = usefulness;
 			dataBase.DealArea = Integer.valueOf(area).intValue();
 			dataBase.DealQuantity = Integer.valueOf(DealQuantity);
-
 		} 
 		else {
 			System.out.println( TAG + " parse error");

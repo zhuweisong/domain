@@ -12,39 +12,36 @@ import org.jsoup.select.Elements;
 import com.house.constvalue.DataStruct;
 import com.house.constvalue.DataStruct.Item;
 
-public class HouseNewInfoFetcher extends Fetcher {
+public class NewHouseInfoFetcher extends Fetcher {
 	private static final String TAG = "HouseNewInfoFetcher"; 
 	private static final String urlD = "http://ris.szpl.gov.cn/credit/showcjgs/ysfcjgs.aspx?cjType=0";
 	private static final String urlM = "http://ris.szpl.gov.cn/credit/showcjgs/ysfcjgs.aspx?cjType=0";
 	
-	public HouseNewInfoFetcher() {	
+	public NewHouseInfoFetcher() {	
 	}
 
 	@Override
-	protected String getURL(int type) {
-		if (type == TYPE_DAY) 
-			return urlD;
-		else if (type == TYPE_MONTH) 
-			return urlM;
-		return null;
+	protected String getURL() {
+		return urlM;
 	}
 	
 	@Override
-	protected String getTag(int type) {
-		if (type == TYPE_DAY) 
+	protected String getTagOfDay() {
 			return "clientList2"; 
-		else if (type == TYPE_MONTH) 
-			return "clientList4";
-		return null;
+
 	}
 	
 	@Override
-	protected String getTagDate(int type) {
-		if (type == TYPE_DAY) 
-			return "lblCurTime2";
-		else if (type == TYPE_MONTH) 
-			return "TrClientList4";
-		return null;
+	protected String getTagOfMonth() {
+		
+			return "clientList2"; 
+	}
+	
+	@Override
+	protected String getTagOfDate() {
+
+			return "lbldistrict2";
+
 	}
 	
 	@Override
@@ -125,11 +122,5 @@ public class HouseNewInfoFetcher extends Fetcher {
 
 		return dataBase;
 	}
-
-
-
-
-
-
 	
 }

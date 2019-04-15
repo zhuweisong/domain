@@ -333,9 +333,6 @@ public class JDBCTutorialUtilities {
       JDBCTutorialUtilities.cursorHoldabilitySupport(myConnection);
       JDBCTutorialUtilities.rowIdLifetime(myConnection);
 
-      JDBCTutorialUtilities.initializeTables(myConnection,
-							              myJDBCTutorialUtilities.dbName,
-							              myJDBCTutorialUtilities.dbms);
     } catch (SQLException e) {
       JDBCTutorialUtilities.printSQLException(e);
     } catch (Exception e) {

@@ -1,15 +1,11 @@
 package com.house.DB;
 
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.house.constvalue.DataStruct;
-import com.house.utils.Utils;
 
 /**
  * 成交信息表  日报 DealInfoDate
@@ -26,7 +22,7 @@ public class DealInfoDateTable extends DBBase {
 		this.dbms = dbmsArg;
 	}
 	
-	@Override
+	
 	public String getSQLCreateTable(){
 		String createString = "create table IF not exists " 
 				+ TABLE_NAME
@@ -44,7 +40,6 @@ public class DealInfoDateTable extends DBBase {
 	}
 
 	
-	
 	/**
 	 * 写入Item项
 	 * @param items
@@ -56,7 +51,7 @@ public class DealInfoDateTable extends DBBase {
 			StringBuilder sb = new StringBuilder();
 			sb.append("INSERT INTO ");
 			sb.append(TABLE_NAME);
-			sb.append("VALUES (");
+			sb.append(" VALUES (");
 			sb.append("'" + item.date.toGMTString()+ "'");
 			sb.append(",");
 			sb.append("'" + item.HouseDistrict + "'");
@@ -84,40 +79,5 @@ public class DealInfoDateTable extends DBBase {
 		}
 	}
 	
-	/**
-	 * 批量执行sql
-	 * @param sqls
-	 * @throws SQLException
-	 */
-	private void batchUpdate(List<String> sqls) throws SQLException {
-
-		Statement stmt = null;
-		try {
-
-			this.con.setAutoCommit(false);
-			stmt = this.con.createStatement();
-			
-			for (String sql : sqls) {
-				if (!sql.isEmpty())
-					stmt.addBatch(sql);
-			}
-
-			stmt.executeBatch();
-			this.con.commit();
-
-		} catch (BatchUpdateException b) {
-			JDBCTutorialUtilities.printBatchUpdateException(b);
-		} catch (SQLException ex) {
-			JDBCTutorialUtilities.printSQLException(ex);
-		} finally {
-			if (stmt != null) {
-				stmt.close();
-			}
-			this.con.setAutoCommit(true);
-		}
-	}
-
-
-
 	
 }

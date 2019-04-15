@@ -5,6 +5,8 @@ import java.util.Properties;
 
 public class ConfigManagerImpl extends configManager {
 	final static String fileName = "config.xml";
+
+	
 	Properties prop;
 	
 	void init() {

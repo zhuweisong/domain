@@ -75,10 +75,8 @@ abstract public class DBBase {
 			stmt.executeBatch();
 			this.con.commit();
 
-		} catch (BatchUpdateException b) {
-			JDBCTutorialUtilities.printBatchUpdateException(b);
-		} catch (SQLException ex) {
-			JDBCTutorialUtilities.printSQLException(ex);
+		} catch (Exception b) {
+			b.printStackTrace();
 		} finally {
 			if (stmt != null) {
 				stmt.close();

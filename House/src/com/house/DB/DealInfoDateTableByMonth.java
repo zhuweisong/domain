@@ -2,6 +2,7 @@ package com.house.DB;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +13,11 @@ import com.house.constvalue.DataStruct;
  * @author zhuweisong
  *
  */
-public class DealInfoDateTable extends DBBase {
+public class DealInfoDateTableByMonth extends DBBase {
 	private Connection con;
 	private String dbms;
-	private final static String TABLE_NAME = "DealInfoDate"; 
-	public DealInfoDateTable(Connection connArg, String dbNameArg, String dbmsArg) {
+	private final static String TABLE_NAME = "dealInfoByMonth"; 
+	public DealInfoDateTableByMonth(Connection connArg, String dbNameArg, String dbmsArg) {
 		super(connArg, null, TABLE_NAME);
 		this.con = connArg;
 		this.dbms = dbmsArg;
@@ -32,9 +33,8 @@ public class DealInfoDateTable extends DBBase {
 				+ "Usefulness char(64) NOT NULL, " 
 				+ "DealQuantity int(32) DEFAULT 0, "
 				+ "DealArea int(32) DEFAULT 0, " 
-				+ "DealPrice int(32) DEFAULT 0,"
-				+ "StaticType int(32) DEFAULT 0,"
-				+ "PRIMARY KEY(id))";
+				+ "Type int(32) DEFAULT 0,"
+				+ "PRIMARY KEY(id));";
 		
 		return createString;
 	}
@@ -46,13 +46,18 @@ public class DealInfoDateTable extends DBBase {
 	 * @param type
 	 */
 	public void insert(List<DataStruct.Item> items, int type) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //从前端或者自己模拟一个日期格式，转为String即可
+        
 		List<String> sqls = new ArrayList<String>();
 		for (DataStruct.Item item : items) {
+			String dateStr = format.format(item.date);
 			StringBuilder sb = new StringBuilder();
 			sb.append("INSERT INTO ");
 			sb.append(TABLE_NAME);
+			sb.append("(DealDate, HouseDistrict, Usefulness, DealQuantity, DealArea, DealPrice, Type, updateDate)");
 			sb.append(" VALUES (");
-			sb.append("'" + item.date.toGMTString()+ "'");
+			sb.append("'" + dateStr + "'");
 			sb.append(",");
 			sb.append("'" + item.HouseDistrict + "'");
 			sb.append(",");
@@ -64,7 +69,9 @@ public class DealInfoDateTable extends DBBase {
 			sb.append(",");
 			sb.append(item.DealPrice);
 			sb.append(",");
-			sb.append(type);
+			sb.append(item.Type);
+			sb.append(",");
+			sb.append("Now()");
 			sb.append(");");
 			
 			String sql = sb.toString();

@@ -25,7 +25,7 @@ public abstract class Fetcher {
 	
 	protected abstract String getURL();
 
-	protected abstract List<DataStruct.Item> realyGetData(String tag, java.sql.Date date);
+	protected abstract List<DataStruct.Item> realyGetData(String tag, java.sql.Date date, int type);
 	
 	protected abstract String getTagOfDay();
 	protected abstract String getTagOfMonth();
@@ -35,21 +35,25 @@ public abstract class Fetcher {
 	
 	protected Boolean connect(String url) {
 		Boolean res = true;
-		try {
-			Connection con = Jsoup.connect(url);
-			con.timeout(8000);
-			doc = con.get();
-		} catch (MalformedURLException e1) {
-			res = false;
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			res = false;
-			e1.printStackTrace();
+		
+		if (doc == null) {	
+			try {
+				Connection con = Jsoup.connect(url);
+				con.timeout(8000);
+				doc = con.get();
+			} catch (MalformedURLException e1) {
+				res = false;
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				res = false;
+				e1.printStackTrace();
+			}
 		}
+
 		return res && doc != null;
 	}
 	
-	public List<DataStruct.Item> getDataForDay() {
+	public List<DataStruct.Item> getDataByDay(int type) {
 		//1、获取URL
 		String url = getURL();
 		
@@ -57,20 +61,19 @@ public abstract class Fetcher {
  		Boolean res = connect(url);
 		if (res) {
 			
-			 Calendar rightNow = Calendar.getInstance();
-			 rightNow.add(Calendar.DAY_OF_YEAR,-1);//日期减1天
-			 
-			 String tagDateString = getTagOfDate();
- 			 java.sql.Date date = parseDate(tagDateString);
-			
+			String tagDateString = getTagOfDate();
+ 			java.sql.Date date = parseDate(tagDateString);
+ 			 
+			Calendar rightNow = Calendar.getInstance();
+			rightNow.add(Calendar.DAY_OF_YEAR,-1);//日期减1天
 			Date yesterday = rightNow.getTime();
 			
-			//1、如果数据等于当天，则拉数据
+			//1、如果网页上的数据等于昨天，则拉数据
 //			if (yesterday.getYear() == date.getYear() 
 //					&& yesterday.getMonth() == date.getMonth() 
 //					&& yesterday.getDay() == date.getDay()) {
 				String tag = getTagOfDay();
-				List<DataStruct.Item> daydata = realyGetData(tag, date);
+				List<DataStruct.Item> daydata = realyGetData(tag, date, type);
 				return daydata;
 //			}
 		}
@@ -78,16 +81,16 @@ public abstract class Fetcher {
 		return null;
 	}
 	
-	public List<DataStruct.Item> getDataForMonth() {
+	public List<DataStruct.Item> getDataByMonth(int type) {
 		Date today = new Date();
-		if (today.getDay() == 1) {
+		if (today.getDay() == 1) { //每个月的1号，更新月度的数据
 			String url = getURL();
 	 		Boolean res = connect(url);
 	 		
 			if (res) {
 				java.sql.Date date = new java.sql.Date(today.getTime());
 				String tag = getTagOfMonth();
-				List<DataStruct.Item> monthdata = realyGetData(tag, date);
+				 List<DataStruct.Item> monthdata = realyGetData(tag, date, type);
 				return monthdata;
 			}
 		}

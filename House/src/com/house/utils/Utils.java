@@ -8,6 +8,10 @@ import java.util.Date;
 
 public class Utils {
 
+	static public void Log(final String TAG, final String value) {
+		System.out.println( TAG + ":" + value);
+	}
+	
 	static public java.sql.Date getCurrentSqlDate() {
 		java.util.Date date1 = new java.util.Date();  
 		return new java.sql.Date(date1.getTime()); 

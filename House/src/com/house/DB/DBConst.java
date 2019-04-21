@@ -9,4 +9,7 @@ public class DBConst {
 	public static final String SERVER_NAME = "localhost"; 
 	public static final int PORT_NUMBER = 3306; 	
 	
+	
+	public static final int first_Deal = 1;
+	public static final int second_Deal = 2;
 }

@@ -20,18 +20,18 @@ public class DataStruct {
 		public String toString() {
 			return ((date != null) ? date.toString() : "") + "|" 
 						+ HouseDistrict + "|" + Usefulness + "|" + DealQuantity
-						+ "|" + DealArea   + "|" + DealPrice ;
+						+ "|" + DealArea   + "|" + Type ;
 		}
 		public Item() {}
 		public Item(java.sql.Date dt, String dis) {
 		}
 		public java.sql.Date date; //日期
 		public String HouseDistrict;  //所在区
+		public String Usefulness; 		//房产用途 公寓, 住宅，商业
 		public int DealQuantity;	//成交套数
 		public int DealArea;		//成交面积
-		public int DealPrice;		//成交均价
-		public String Usefulness; 		//房产用途 公寓, 住宅，商业
-		public String memo; //可以在此填写政策
+		public int Type;		//1手/2手
+		public int  DealPrice;
 	}
 	
 	/**

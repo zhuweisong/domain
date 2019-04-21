@@ -1,6 +1,7 @@
 package com.house.model;
 import com.house.constvalue.DataStruct;
 import com.house.constvalue.DataStruct.Item;
+import com.house.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,7 +47,7 @@ public class SecondHandHouseInfoFetcher extends Fetcher {
 	 * @return
 	 */
 	@Override
-	protected List<Item> realyGetData(String tag, java.sql.Date date) {
+	protected List<Item> realyGetData(String tag, java.sql.Date date, int type) {
 		
 		Element tagEle = doc.getElementById(tag);
 		
@@ -65,9 +66,9 @@ public class SecondHandHouseInfoFetcher extends Fetcher {
 				if (item != null) {
 					item.HouseDistrict = district;
 					item.date = date;
+					item.Type = type;
 					items.add(item);
-					
-					System.out.println( TAG + ":" + item.toString());
+					Utils.Log(tag, item.toString());
 				}
 			}
 			return items;
@@ -112,7 +113,7 @@ public class SecondHandHouseInfoFetcher extends Fetcher {
 			dataBase.DealQuantity = Integer.valueOf(DealQuantity);
 		} 
 		else {
-			System.out.println( TAG + " parse error");
+			Utils.Log(TAG, " parse error");
 		}
 
 		return dataBase;

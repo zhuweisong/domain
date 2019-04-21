@@ -45,7 +45,7 @@ public class NewHouseInfoFetcher extends Fetcher {
 	}
 	
 	@Override
-	protected List<Item> realyGetData(String tag, Date date) {
+	protected List<Item> realyGetData(String tag, Date date, int type) {
 		String district = "全市";
 		Element parenet = doc.getElementById(tag);
 		Elements es =  parenet.child(0).children();
@@ -59,6 +59,7 @@ public class NewHouseInfoFetcher extends Fetcher {
 			if (item != null) {
 				item.HouseDistrict = district;
 				item.date = date;
+				item.Type = type;
 				items.add(item);
 				
 				System.out.println( TAG + ":" + item.toString());

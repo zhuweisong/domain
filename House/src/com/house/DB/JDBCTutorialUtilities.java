@@ -67,7 +67,7 @@ public class JDBCTutorialUtilities {
   private Properties prop;
   
   public static void initializeTables(Connection con, String dbNameArg, String dbmsArg) throws SQLException {
-	DealInfoDateTable autionTable = new DealInfoDateTable(con, dbNameArg, dbmsArg);
+	DealInfoDateTableByDay autionTable = new DealInfoDateTableByDay(con, dbNameArg, dbmsArg);
     System.out.println("\nCreating autionTable table");
     autionTable.createTable();
 
@@ -151,18 +151,7 @@ public class JDBCTutorialUtilities {
     return false;
   }
 
-  public static void printBatchUpdateException(BatchUpdateException b) {
-	  
-    System.out.println("----BatchUpdateException----");
-    System.err.println("SQLState:  " + b.getSQLState());
-    System.err.println("Message:  " + b.getMessage());
-    System.out.println("Vendor:  " + b.getErrorCode());
-    System.out.print("Update counts:  ");
-    int[] updateCounts = b.getUpdateCounts();
-    for (int i = 0; i < updateCounts.length; i++) {
-      System.out.print(updateCounts[i] + "   ");
-    }
-  }
+
 
   public static void printSQLException(SQLException ex) {
 	  
@@ -250,12 +239,14 @@ public class JDBCTutorialUtilities {
 
     currentUrlString = "jdbc:" + this.dbms + "://" + this.serverName +
                                       ":" + this.portNumber + "/";
+    
+    System.out.println("Connected to database:" + currentUrlString);
     conn = DriverManager.getConnection(currentUrlString, connectionProps);
       
     this.urlString = currentUrlString + this.dbName;
       conn.setCatalog(this.dbName);
 
-    System.out.println("Connected to database");
+    
     return conn;
   }
 

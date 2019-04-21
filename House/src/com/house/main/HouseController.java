@@ -2,15 +2,16 @@ package com.house.main;
 
 import java.util.List;
 
+import com.house.DB.DBConst;
 import com.house.DB.DBUpdateProxy;
-import com.house.DB.DealInfoDateTable;
 import com.house.constvalue.DataStruct;
 import com.house.model.NewHouseInfoFetcher;
 import com.house.model.SecondHandHouseInfoFetcher;
+import com.house.utils.Utils;
 
 
 public class HouseController {
-	
+	static final String TAG = "HouseController";
 	configManager mConfigManager;
 	DBUpdateProxy mDBProxy;
 	
@@ -29,16 +30,27 @@ public class HouseController {
 	}
 	
 	private void updateSecondHandInfo() {
-		SecondHandHouseInfoFetcher shfetchor = new SecondHandHouseInfoFetcher();	
-		List<DataStruct.Item> dplDay = shfetchor.getDataForDay();
-		List<DataStruct.Item> dplMonth = shfetchor.getDataForMonth();
-		mDBProxy.updateSecondHandHouseInfo(dplDay);
+		SecondHandHouseInfoFetcher fetchor = new SecondHandHouseInfoFetcher();	
+		
+		List<DataStruct.Item> dplDay = fetchor.getDataByDay(DBConst.second_Deal);
+		if (dplDay != null && dplDay.size()>0) {
+			mDBProxy.updateSecondHandHouseInfo(dplDay);
+		}
+		else {
+			Utils.Log(TAG, "updateSecondHandInfo error");
+		}
+		
+		List<DataStruct.Item> dplMonth = fetchor.getDataByMonth(DBConst.second_Deal);
+		if (dplMonth != null &&  dplMonth.size() > 0) {
+			mDBProxy.updateSecondHandHouseInfoByMonth(dplMonth);
+		}
+		
 	}
 	
 	private void updateNewHouseInfo() {
 		NewHouseInfoFetcher fc1 = new  NewHouseInfoFetcher();
-		List<DataStruct.Item> newdp = fc1.getDataForDay();
-		List<DataStruct.Item> newMonth = fc1.getDataForMonth();
+		List<DataStruct.Item> newdp = fc1.getDataByDay(DBConst.first_Deal);
+		List<DataStruct.Item> newMonth = fc1.getDataByMonth(DBConst.first_Deal);
 		mDBProxy.updateNewHouseInfo(newdp);
 	}
 }
